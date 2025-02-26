@@ -13,6 +13,8 @@ opencv-python
 
 ### Run
 
+Pick a username in all lower case e.g. `skocour`
+
 ```
-python3 runme.py --username abenbihi
+python3 runme.py --username <username>
 ```
