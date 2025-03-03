@@ -1,4 +1,5 @@
-data/gaussiancut/garden/table/worldLabs.png
-data/gaussiancut/garden/ball/worldLabs.png
-data/gaussiancut/kitchen/eggbox/worldLabs.png
-data/gaussiancut/kitchen/tray/worldLabs.png
+#path_render_after_removal,path_render_before_removal
+data/gaussiancut/garden/table/worldLabs.png data/gaussiancut/garden/table/worldLabs.png
+data/gaussiancut/garden/ball/worldLabs.png data/gaussiancut/garden/ball/worldLabs.png 
+data/gaussiancut/kitchen/eggbox/worldLabs.png data/gaussiancut/kitchen/eggbox/worldLabs.png
+data/gaussiancut/kitchen/tray/worldLabs.png data/gaussiancut/kitchen/tray/worldLabs.png
