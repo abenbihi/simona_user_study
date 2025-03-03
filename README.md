@@ -13,8 +13,11 @@ opencv-python
 
 ### Run
 
-Pick a username in all lower case e.g. `skocour`
+Pick a username in all lower case e.g. `skocour` and please run all 4 questions
 
 ```
-python3 runme.py --username <username>
+python3 runme.py --username <username> --question Q1
+python3 runme.py --username <username> --question Q2
+python3 runme.py --username <username> --question Q3
+python3 runme.py --username <username> --question Q4
 ```
