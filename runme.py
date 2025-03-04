@@ -17,10 +17,12 @@ QUESTIONS = {
 
 #OBJECTS = [l.strip() for l in open("data/labels.txt", "r").readlines()]
 OBJECTS = {}
-OBJECTS["garden"] = ["table", "chair", "car", "plant", "barbecue", "dog"]
-OBJECTS["kitchen"] = ["eggbox" "tray", "plant", "table", "pasta", "gloves",
-        "ball", "roll", "vase", "salt", "glass", "plate", "mixer", "candle"
+OBJECTS["garden"] = ["barbecue", "ball", "bottle of water", "car", "chair", "dog", "plant", "vase", "table"]
+OBJECTS["counter"] = ["baking tray", "ball", "candle", "chocolate bar", "eggbox", "glass", "gloves",
+        "mixer", "pasta", "plant", "plate", "roll", "salt", "toater", "vase"
         ]
+OBJECTS["room"] = ["ball", "plant", "shoes", "standing lamp", "table", "toy", "tray"]
+OBJECTS["kitchen"] = ["books", "bowl of fruit", "laptop", "plate with food", "toy truck"]
 
 def check_path(path):
     if not os.path.exists(path):
