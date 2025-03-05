@@ -18,12 +18,10 @@ QUESTIONS = {
 
 #OBJECTS = [l.strip() for l in open("data/labels.txt", "r").readlines()]
 OBJECTS = {}
-OBJECTS["garden"] = ["barbecue", "ball", "bottle of water", "car", "chair", "dog", "plant", "vase", "table"]
-OBJECTS["counter"] = ["baking tray", "ball", "candle", "chocolate bar", "eggbox", "glass", "gloves",
-        "mixer", "pasta", "plant", "plate", "roll", "salt", "toater", "vase"
-        ]
-OBJECTS["room"] = ["ball", "plant", "shoes", "standing lamp", "table", "toy", "tray"]
-OBJECTS["kitchen"] = ["books", "bowl of fruit", "laptop", "plate with food", "toy truck"]
+OBJECTS["garden"] = ["barbecue", "ball", "bottle of water", "chair", "dog", "vase", "table"]
+OBJECTS["counter"] = ["baking tray", "chocolate bar", "eggbox", "gloves", "mixer", "plant", "plate"]
+OBJECTS["room"] = ["ball", "pillow", "plant", "shoes", "standing lamp", "table", "toy"]
+OBJECTS["kitchen"] = ["books", "bowl of fruit", "brick", "laptop", "plant", "plate with food", "toy truck"]
 
 def check_path(path):
     if not os.path.exists(path):
@@ -77,7 +75,21 @@ def main_binary(args, question_tag):
     """Ask a binary question to the user that answers yes / no."""
     # Read image to list to display
     image_list_path = "data/image_list.txt"
-    image_names = [l.strip().split(" ") for l in open(image_list_path,"r").readlines() if l[0] != "#"]
+    all_image_names = [l.strip().split(" ") for l in open(image_list_path, "r").readlines() if l[0] != "#"]
+
+    # Filter to get unique combinations of scene, object, and method
+    unique_images = {}
+    for image_name in all_image_names:
+        scene = image_name[0].split("/")[2]  # Assuming the scene is part of the path
+        obj = image_name[0].split("/")[3]    # Assuming the object is part of the path
+        method = image_name[0].split("/")[4]  # Assuming the method is part of the path
+        key = (scene, obj, method)
+        if key not in unique_images:
+            unique_images[key] = []  # Initialize a list for each unique key
+        unique_images[key].append(image_name)  # Append the image to the list
+
+    # Randomly select one image from each unique combination
+    image_names = [random.choice(images) for images in unique_images.values()]
 
     # Read previous user's response if they are resuming the experiment
     output_path = "answers_%s.json"%args.username
@@ -135,12 +147,7 @@ def main_binary(args, question_tag):
         if question_tag == "Q2": # draw a box
             mask_path = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name)
             mask = cv2.imread(mask_path, 0)
-
-            # Mock mask in the mean time (comment this)
-            #h, w = img.shape[:2]
-            #mask = np.zeros((h,w), dtype=np.uint8)
-            #cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
-
+            mask = cv2.resize(mask, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_NEAREST) 
             box = get_box_from_binary_mask(mask)
 
             # Draw the box on the image
@@ -152,7 +159,6 @@ def main_binary(args, question_tag):
         #    img = cv2.resize(img, (w,h), interpolation=cv2.INTER_AREA) 
 
         cv2.imshow("img", img)
-        #cv2.imshow("mask", mask)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in [ord("y"), ord("n"), ord("p"), ord("l"), ord("q")]:
@@ -196,7 +202,7 @@ def main_binary(args, question_tag):
             break
 
 
-def main_multi_method(args, question_tag, num_methods=4):
+def main_multi_method(args, question_tag, num_methods=):
     """Show results from 4 methods and ask user to pick one (a,b,c,d)."""
     alphabet_list = list(string.ascii_lowercase)
     print(alphabet_list)
@@ -210,10 +216,21 @@ def main_multi_method(args, question_tag, num_methods=4):
 
     # Read image to list to display
     image_list_path = "data/multi_method_list.txt"
-    #image_list_path = "data/multi_method_list3.txt" # for 3 methods
-    image_tuples = [l.strip().split(" ") for l in open(image_list_path,"r").readlines()]
-    if len(image_tuples[0]) != num_methods:
-        raise ValueError("@Simona, change the num_methods param")
+    all_image_tuples = [l.strip().split(" ") for l in open(image_list_path, "r").readlines()]
+
+    # Group images by unique combinations of scene, object, and method
+    unique_images = {}
+    for image_tuple in all_image_tuples:
+        scene = image_tuple[0].split("/")[2]  # Assuming the scene is part of the path
+        obj = image_tuple[0].split("/")[3]    # Assuming the object is part of the path
+        method = image_tuple[0].split("/")[4]  # Assuming the method is part of the path
+        key = (scene, obj, method)
+        if key not in unique_images:
+            unique_images[key] = []  # Initialize a list for each unique key
+        unique_images[key].append(image_tuple)  # Append the image tuple to the list
+
+    # Randomly select one image tuple from each unique combination
+    image_tuples = [random.choice(tuples) for tuples in unique_images.values()]
 
     # Read previous user's response if they are resuming the experiment
     output_path = "answers_%s.json"%args.username
@@ -275,12 +292,7 @@ def main_multi_method(args, question_tag, num_methods=4):
 
             mask_path = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name)
             mask = cv2.imread(mask_path, 0)
-
-            # Mock mask in the mean time (comment me)
-            #h, w = img.shape[:2]
-            #mask = np.zeros((h,w), dtype=np.uint8)
-            #cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
-
+            mask = cv2.resize(mask, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_NEAREST) 
             box = get_box_from_binary_mask(mask)
 
             # Draw the box on the image
@@ -322,7 +334,6 @@ def main_multi_method(args, question_tag, num_methods=4):
                     "Handling %d methods is not implemented, num_methods must be in {2,3,4}")
     
         cv2.imshow("img", out)
-        #cv2.imshow("mask", mask)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in authorized_keys:
@@ -363,7 +374,21 @@ def main_binary_method(args, question_tag):
     """Show results from 2 methods and ask user to pick one (left / right)."""
     # Read image to list to display
     image_list_path = "data/pair_list.txt"
-    image_pairs = [l.strip() for l in open(image_list_path,"r").readlines()]
+    all_image_names = [l.strip().split(" ") for l in open(image_list_path, "r").readlines() if l[0] != "#"]
+
+    # Filter to get unique combinations of scene, object, and method
+    unique_images = {}
+    for image_name in all_image_names:
+        scene = image_name[0].split("/")[2]  # Assuming the scene is part of the path
+        obj = image_name[0].split("/")[3]    # Assuming the object is part of the path
+        method = image_name[0].split("/")[4]  # Assuming the method is part of the path
+        key = (scene, obj, method)
+        if key not in unique_images:
+            unique_images[key] = []  # Initialize a list for each unique key
+        unique_images[key].append(image_name)  # Append the image to the list
+
+    # Randomly select one image from each unique combination
+    image_names = [random.choice(images) for images in unique_images.values()]
 
     # Read previous user's response if they are resuming the experiment
     output_path = "answers_%s.json"%args.username
@@ -400,8 +425,6 @@ def main_binary_method(args, question_tag):
         # Read next image
         image_pair = image_pairs[idx]
         image_name1, image_name2 = image_pair.split(" ")
-        #print(image_name1)
-        #print(image_name2)
         check_path(image_name1)
         check_path(image_name2)
         img1 = cv2.imread(image_name1)
@@ -411,16 +434,11 @@ def main_binary_method(args, question_tag):
         # the human's eye
         mask_path1 = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name1)
         mask1 = cv2.imread(mask_path, 0)
+        mask1 = cv2.resize(mask1, (img1.shape[1], img1.shape[0]), interpolation=cv2.INTER_NEAREST) 
         mask_path2 = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name2)
-        mask1 = cv2.imread(mask_path, 0)
-        
-        # Mock mask in the mean time (comment me)
-        #h, w = img1.shape[:2]
-        #mask1 = np.zeros((h,w), dtype=np.uint8)
-        #cv2.circle(mask1, (w//2,h//2), min(h,w)//2, 255, -1)
-        #mask2 = mask1
-
-
+        mask2 = cv2.imread(mask_path2, 0)
+        mask2 = cv2.resize(mask2, (img2.shape[1], img2.shape[0]), interpolation=cv2.INTER_NEAREST) 
+      
         box1 = get_box_from_binary_mask(mask1)
         box2 = get_box_from_binary_mask(mask2)
 
@@ -441,7 +459,6 @@ def main_binary_method(args, question_tag):
         out[:,w-2:w+2] = 0
 
         cv2.imshow("img", out)
-        #cv2.imshow("mask", mask)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in [ord("y"), ord("n"), ord("p"), ord("x"), ord("q"), ord("l"), ord("r")]:
@@ -577,8 +594,8 @@ def main_binary_method(args, question_tag):
 #            break
 
 
-def main_choice(args, question_tag, num_choices=4):
-    """Ask user if they can see one of the objects in the specified list (a,b,c,d, ...)."""
+def main_choice(args, question_tag, num_choices=7):
+    """Ask user if they can see one of the objects in the specified list (a,b,c,d,e,f,g ...)."""
     alphabet_list = list(string.ascii_lowercase)
     print(alphabet_list)
 
@@ -591,8 +608,22 @@ def main_choice(args, question_tag, num_choices=4):
 
     # Read image to list to display
     image_list_path = "data/image_list.txt"
-    image_names = [l.strip().split(" ")[0] for l in open(image_list_path,"r").readlines() if l[0] != "#"]
-    
+    all_image_names = [l.strip().split(" ")[0] for l in open(image_list_path, "r").readlines() if l[0] != "#"]
+
+    # Filter to get unique combinations of scene, object, and method
+    unique_images = {}
+    for image_name in all_image_names:
+        scene = image_name[0].split("/")[2]  # Assuming the scene is part of the path
+        obj = image_name[0].split("/")[3]    # Assuming the object is part of the path
+        method = image_name[0].split("/")[4]  # Assuming the method is part of the path
+        key = (scene, obj, method)
+        if key not in unique_images:
+            unique_images[key] = []  # Initialize a list for each unique key
+        unique_images[key].append(image_name)  # Append the image to the list
+
+    # Randomly select one image from each unique combination
+    image_names = [random.choice(images) for images in unique_images.values()]
+
     scene = image_names[0].split("/")[2]
     assert(scene in OBJECTS)
 
@@ -639,11 +670,6 @@ def main_choice(args, question_tag, num_choices=4):
         # the human's eye
         mask_path = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name)
         mask = cv2.imread(mask_path, 0)
-
-        # Mock mask in the mean time (comment me)
-        #h, w = img.shape[:2]
-        #mask = np.zeros((h,w), dtype=np.uint8)
-        #cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
         box = get_box_from_binary_mask(mask)
 
         # Draw the box on the image
@@ -703,7 +729,6 @@ def main_choice(args, question_tag, num_choices=4):
         #print(output[question_tag][image_name]) # print the choices + gt
 
         cv2.imshow("img", img)
-        cv2.imshow("mask", mask)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in authorized_keys:
