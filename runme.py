@@ -202,7 +202,7 @@ def main_binary(args, question_tag):
             break
 
 
-def main_multi_method(args, question_tag, num_methods=):
+def main_multi_method(args, question_tag, num_methods=4):
     """Show results from 4 methods and ask user to pick one (a,b,c,d)."""
     alphabet_list = list(string.ascii_lowercase)
     print(alphabet_list)
