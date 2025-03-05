@@ -6,7 +6,13 @@ import string
 import cv2
 import numpy as np
 import re
-
+import random
+import logging  # For logging events
+from pathlib import Path  # For path manipulations
+# Optional libraries
+import matplotlib.pyplot as plt  # For visualizations
+from PIL import Image  # For advanced image processing
+from skimage import io, filters  # For additional image processing
 
 QUESTIONS = {
     "Q1": "Was an object removed from this image? (y/n)",
