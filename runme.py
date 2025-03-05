@@ -5,6 +5,7 @@ import string
 
 import cv2
 import numpy as np
+import re
 
 
 QUESTIONS = {
@@ -132,14 +133,13 @@ def main_binary(args, question_tag):
         # Read mask associated to it to derive a bounding box from it to guide
         # the human's eye
         if question_tag == "Q2": # draw a box
-            # TODO: set the mask path (uncomment this)
-            #mask_path = None
-            #mask = cv2.imread(mask_path, 0)
+            mask_path = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name)
+            mask = cv2.imread(mask_path, 0)
 
-            # TODO: mock mask in the mean time (comment this)
-            h, w = img.shape[:2]
-            mask = np.zeros((h,w), dtype=np.uint8)
-            cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
+            # Mock mask in the mean time (comment this)
+            #h, w = img.shape[:2]
+            #mask = np.zeros((h,w), dtype=np.uint8)
+            #cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
 
             box = get_box_from_binary_mask(mask)
 
@@ -272,14 +272,14 @@ def main_multi_method(args, question_tag, num_methods=4):
 
             # Read mask associated to it to derive a bounding box from it to guide
             # the human's eye
-            # TODO: set the mask path (uncomment me)
-            #mask_path1 = None
-            #mask1 = cv2.imread(mask_path1, 0)
 
-            # TODO: mock mask in the mean time (comment me)
-            h, w = img.shape[:2]
-            mask = np.zeros((h,w), dtype=np.uint8)
-            cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
+            mask_path = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name)
+            mask = cv2.imread(mask_path, 0)
+
+            # Mock mask in the mean time (comment me)
+            #h, w = img.shape[:2]
+            #mask = np.zeros((h,w), dtype=np.uint8)
+            #cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
 
             box = get_box_from_binary_mask(mask)
 
@@ -409,17 +409,16 @@ def main_binary_method(args, question_tag):
 
         # Read mask associated to it to derive a bounding box from it to guide
         # the human's eye
-        # TODO: set the mask path (uncomment me)
-        #mask_path1 = None
-        #mask_path2 = None
-        #mask1 = cv2.imread(mask_path1, 0)
-        #mask2 = cv2.imread(mask_path2, 0)
-
-        # TODO: mock mask in the mean time (comment me)
-        h, w = img1.shape[:2]
-        mask1 = np.zeros((h,w), dtype=np.uint8)
-        cv2.circle(mask1, (w//2,h//2), min(h,w)//2, 255, -1)
-        mask2 = mask1
+        mask_path1 = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name1)
+        mask1 = cv2.imread(mask_path, 0)
+        mask_path2 = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name2)
+        mask1 = cv2.imread(mask_path, 0)
+        
+        # Mock mask in the mean time (comment me)
+        #h, w = img1.shape[:2]
+        #mask1 = np.zeros((h,w), dtype=np.uint8)
+        #cv2.circle(mask1, (w//2,h//2), min(h,w)//2, 255, -1)
+        #mask2 = mask1
 
 
         box1 = get_box_from_binary_mask(mask1)
@@ -594,7 +593,6 @@ def main_choice(args, question_tag, num_choices=4):
     image_list_path = "data/image_list.txt"
     image_names = [l.strip().split(" ")[0] for l in open(image_list_path,"r").readlines() if l[0] != "#"]
     
-    # TODO: specify the scene
     scene = image_names[0].split("/")[2]
     assert(scene in OBJECTS)
 
@@ -639,14 +637,13 @@ def main_choice(args, question_tag, num_choices=4):
 
         # Read mask associated to it to derive a bounding box from it to guide
         # the human's eye
-        # TODO: set the mask path (uncomment me)
-        #mask_path = None
-        #mask = cv2.imread(mask_path, 0)
+        mask_path = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name)
+        mask = cv2.imread(mask_path, 0)
 
-        # TODO: mock mask in the mean time (comment me)
-        h, w = img.shape[:2]
-        mask = np.zeros((h,w), dtype=np.uint8)
-        cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
+        # Mock mask in the mean time (comment me)
+        #h, w = img.shape[:2]
+        #mask = np.zeros((h,w), dtype=np.uint8)
+        #cv2.circle(mask, (w//2,h//2), min(h,w)//2, 255, -1)
         box = get_box_from_binary_mask(mask)
 
         # Draw the box on the image
