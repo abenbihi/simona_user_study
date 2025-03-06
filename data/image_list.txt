@@ -119,3 +119,15 @@ data/gg/kitchen/truck/DSCF0781_after_removal.png data/gg/kitchen/truck/DSCF0781_
 data/feature_3dgs/kitchen/truck/DSCF0781_after_removal.png data/feature_3dgs/kitchen/truck/DSCF0781_before_removal.png
 data/sags/kitchen/truck/DSCF0781_after_removal.png data/sags/kitchen/truck/DSCF0781_before_removal.png
 data/gaussiancut/kitchen/truck/DSCF0781_after_removal.png data/gaussiancut/kitchen/truck/DSCF0781_before_removal.png
+data/gg/room/table/DSCF4679_after_removal.png data/gg/room/table/DSCF4679_before_removal.png_
+data/feature_3dgs/room/table/DSCF4679_after_removal.png data/feature_3dgs/room/table/DSCF4679_before_removal.png 
+data/sags/room/table/DSCF4679_after_removal.png data/sags/room/table/DSCF4679_before_removal.png
+data/gaussiancut/room/table/DSCF4679_after_removal.png data/gaussiancut/room/table/DSCF4679_before_removal.png
+data/gg/room/table/DSCF4818_after_removal.png data/gg/room/table/DSCF4818_before_removal.png
+data/feature_3dgs/room/table/DSCF4818_after_removal.png data/feature_3dgs/room/table/DSCF4818_before_removal.png
+data/sags/room/table/DSCF4818_after_removal.png data/sags/room/table/DSCF4818_before_removal.png
+data/gaussiancut/room/table/DSCF4818_after_removal.png data/gaussiancut/room/table/DSCF4818_before_removal.png
+data/gg/room/table/DSCF4702_after_removal.png data/gg/room/table/DSCF4702_before_removal.png
+data/feature_3dgs/room/table/DSCF4702_after_removal.png data/feature_3dgs/room/table/DSCF4702_before_removal.png
+data/sags/room/table/DSCF4702_after_removal.png data/sags/room/table/DSCF4702_before_removal.png
+data/gaussiancut/room/table/DSCF4702_after_removal.png data/gaussiancut/room/table/DSCF4702_before_removal.png
