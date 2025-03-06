@@ -617,10 +617,11 @@ def main_choice(args, question_tag, num_choices=8):
         # are doing)
         # Sampling elements without replacement
         indices = np.arange(len(OBJECTS[scene]))
-        np.random.shuffle(indices)
-        indices = indices[:num_choices+1] # keep the +1
-        choice_objects = [OBJECTS[scene][idx] for idx in indices ] 
-        choice_objects = choice_objects[:num_choices]
+        #np.random.shuffle(indices)
+        #indices = indices[:num_choices+1] # keep the +1
+        #choice_objects = [OBJECTS[scene][idx] for idx in indices ] 
+        #choice_objects = choice_objects[:num_choices]
+        choice_objects = OBJECTS[scene][:num_choices]
 
         # Pick the rank of the gt object
         gt_idx = np.random.randint(num_choices)
