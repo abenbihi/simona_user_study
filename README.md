@@ -15,7 +15,7 @@ scikit-image
 
 ### Run
 
-Pick a username in all lower case e.g. `skocour` and please run all 4 questions
+Pick a username in all lower case e.g. `skocour` and please run all 5 questions
 
 ```
 python3 runme.py --username <username> --question Q1
