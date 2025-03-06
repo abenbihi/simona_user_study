@@ -1,4 +1,12 @@
-data/gaussiancut/garden/table/worldLabs.png data/gaussiangrouping/garden/table/worldLabs.png
-data/gaussiancut/garden/ball/worldLabs.png data/gaussiangrouping/garden/ball/worldLabs.png
-data/gaussiancut/kitchen/eggbox/worldLabs.png data/gaussiangrouping/kitchen/eggbox/worldLabs.png
-data/gaussiancut/kitchen/tray/worldLabs.png data/gaussiangrouping/kitchen/tray/worldLabs.png
+#path_render_after_removal,path_render_before_removal
+data/feature_3dgs/room/plant/DSCF4684_before_graphcut.png data/feature_3dgs/room/plant/DSCF4684_after_graphcut.png
+data/feature_3dgs/room/table/DSCF4695_before_graphcut.png data/feature_3dgs/room/table/DSCF4695_after_graphcut.png
+data/feature_3dgs/counter/plant/DSCF6059_before_graphcut.png data/feature_3dgs/counter/plant/DSCF6059_after_graphcut.png
+data/feature_3dgs/garden/vase/DSC07980_before_graphcut.png data/feature_3dgs/garden/vase/DSC07980_after_graphcut.png
+data/feature_3dgs/kitchen/truck/DSCF0680_before_graphcut.png data/feature_3dgs/kitchen/truck/DSCF0680_after_graphcut.png
+data/sags/room/plant/DSCF4761_before_graphcut.png data/sags/room/plant/DSCF4761_after_graphcut.png
+data/sags/room/brown_shoes/DSCF4805_before_graphcut.png data/sags/room/brown_shoes/DSCF4805_after_graphcut.png
+data/sags/counter/egg_box/DSCF5946_before_graphcut.png data/sags/counter/egg_box/DSCF5946_after_graphcut.png
+data/sags/garden/vase/DSC07978_before_graphcut.png data/sags/garden/vase/DSC07978_after_graphcut.png
+data/sags/garden/table/DSC07960_before_graphcut.png data/sags/garden/table/DSC07960_after_graphcut.png
+
