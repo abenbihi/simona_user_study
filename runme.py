@@ -15,19 +15,20 @@ from PIL import Image  # For advanced image processing
 from skimage import io, filters  # For additional image processing
 
 QUESTIONS = {
-    "Q1": "Was an object removed from this image? (y/n)",
-    "Q2": "Was an object removed from this area? (y/n)",
-    "Q3": "In which image is the object best removed?", # 4 methods,
-    "Q4": "What object was there?",
+    "Q1": "What object was there?",
+    "Q2": "Was an object removed from this image? (y/n)",
+    "Q3": "Was an object removed from this area? (y/n)",
+    "Q4": "In which image is the object removed the best?\nBest means you can not recognize what or where was the removed object, while the rest of the scene is not affected)", # 4 methods,
     "Q5": "In which image is the object best removed?", # 2 methods,
 }
 
 #OBJECTS = [l.strip() for l in open("data/labels.txt", "r").readlines()]
 OBJECTS = {}
-OBJECTS["garden"] = ["barbecue", "ball", "bottle of water", "chair", "dog", "vase", "table"]
-OBJECTS["counter"] = ["baking tray", "chocolate bar", "eggbox", "gloves", "mixer", "plant", "plate"]
-OBJECTS["room"] = ["ball", "pillow", "plant", "shoes", "standing lamp", "table", "toy"]
-OBJECTS["kitchen"] = ["books", "bowl of fruit", "brick", "laptop", "plant", "plate with food", "toy truck"]
+OBJECTS["garden"] = ["barbecue", "ball", "bottle of water", "chair", "dog", "vase", "table", "I do not know"]
+OBJECTS["counter"] = ["baking tray", "chocolate bar", "eggbox", "gloves", "mixer", "plant", "plate", "I do not know"]
+OBJECTS["room"] = ["ball", "pillow", "plant", "shoes", "standing lamp", "table", "toy", "I do not know"]
+OBJECTS["kitchen"] = ["books", "bowl of fruit", "brick", "laptop", "plant", "plate with food", "toy truck", "I do not know"]
+
 
 def check_path(path):
     if not os.path.exists(path):
@@ -146,8 +147,6 @@ def main_binary(args, question_tag):
         check_path(image_name)
         img = cv2.imread(image_name)
 
-        if rand_gt < 0.5:
-            img[0:100,0:100] = 0
 
         # Read mask associated to it to derive a bounding box from it to guide
         # the human's eye
@@ -164,8 +163,8 @@ def main_binary(args, question_tag):
         #    h, w = img.shape[:2]
         #    target, target, scale, scale, offset = resize_horizontal(h, w, h, w, args.target_height)
         #    img = cv2.resize(img, (w,h), interpolation=cv2.INTER_AREA) 
-
-        cv2.imshow("img", img)
+        img_resized = cv2.resize(img, (1920, 1080))  # Resize the image to 1920x1080
+        cv2.imshow("img", img_resized)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in [ord("y"), ord("n"), ord("p"), ord("l"), ord("q")]:
@@ -340,8 +339,9 @@ def main_multi_method(args, question_tag, num_methods=4):
         else:
             raise ValueError(
                     "Handling %d methods is not implemented, num_methods must be in {2,3,4}")
-    
-        cv2.imshow("img", out)
+   
+        out_resized = cv2.resize(out, (1920, 1080))  # Resize the image to 1920x1080
+        cv2.imshow("img", out_resized)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in authorized_keys:
@@ -468,11 +468,20 @@ def main_binary_method(args, question_tag):
         #    img1 = cv2.resize(img1, (w,h), interpolation=cv2.INTER_AREA) 
         #    img2 = cv2.resize(img2, (w,h), interpolation=cv2.INTER_AREA) 
     
-        out = np.hstack((img1, img2))
-        h,w = img1.shape[:2]
-        out[:,w-2:w+2] = 0
 
-        cv2.imshow("img", out)
+# Calculate the new width and height for the two images
+        target_width = 2560
+        h, w = img1.shape[:2]  # Get the height and width of the first image
+        new_height = int((target_width / 2) * (h / w))  # Maintain aspect ratio
+
+        # Resize both images to the new height while keeping the width half of the target width
+        img1_resized = cv2.resize(img1, (target_width // 2, new_height))
+        img2_resized = cv2.resize(img2, (target_width // 2, new_height))
+
+        # Combine the two resized images
+        out = np.hstack((img1_resized, img2_resized))
+        out_resized = cv2.resize(out, (target_width, new_height))  # Resize the combined image to the target width
+        cv2.imshow("img", out_resized)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in [ord("y"), ord("n"), ord("p"), ord("x"), ord("q"), ord("l"), ord("r")]:
@@ -512,8 +521,8 @@ def main_binary_method(args, question_tag):
             break
 
 
-def main_choice(args, question_tag, num_choices=7):
-    """Ask user if they can see one of the objects in the specified list (a,b,c,d,e,f,g ...)."""
+def main_choice(args, question_tag, num_choices=8):
+    """Ask user if they can see one of the objects in the specified list (a,b,c,d,e,f,g,h ...)."""
     alphabet_list = list(string.ascii_lowercase)
     print(alphabet_list)
 
@@ -634,7 +643,8 @@ def main_choice(args, question_tag, num_choices=7):
         for idx, choice_object in enumerate(choice_objects):
             output[question_tag][image_name]["choices"].append(choice_object)
 
-        cv2.imshow("img", img)
+        img_resized = cv2.resize(img, (1920, 1080))  # Resize the image to 1920x1080
+        cv2.imshow("img", img_resized)
         key = cv2.waitKey(0) & 0xFF
 
         if key not in authorized_keys:
@@ -701,14 +711,14 @@ if __name__=="__main__":
     #question_tag = "Q3"
     #question_tag = "Q4"
 
-    if question_tag in ["Q1", "Q2"]:
+    if question_tag in ["Q2", "Q3"]:
         main_binary(args, question_tag)
 
-    if question_tag in ["Q3"]:
+    if question_tag in ["Q4"]:
         main_multi_method(args, question_tag)
 
     # TODO" maybe we drop it
-    if question_tag in ["Q4"]:
+    if question_tag in ["Q1"]:
         main_choice(args, question_tag)
 
     if question_tag in ["Q5"]:
