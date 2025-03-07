@@ -150,7 +150,7 @@ def main_binary(args, question_tag):
 
         # Read mask associated to it to derive a bounding box from it to guide
         # the human's eye
-        if question_tag == "Q2": # draw a box
+        if question_tag == "Q3": # draw a box
             mask_path = re.sub(r'_(before|after)_removal\.png$', '_mask.png', image_name)
             mask = cv2.imread(mask_path, 0)
             mask = cv2.resize(mask, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_NEAREST) 
