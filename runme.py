@@ -253,7 +253,7 @@ def main_multi_method(args, question_tag, num_methods=4):
         output[q_tag] = {}
         for image_tuple in image_tuples:
             #image_key = image_tuple[0]
-            image_key = " ".joint(image_tuple)
+            image_key = " ".join(image_tuple)
             output[q_tag][image_key] = -1
 
     if question_tag not in output:
